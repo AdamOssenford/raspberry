@@ -9,7 +9,7 @@ PI2=192.168.7.179
 HAPROXY_DIR=/root/haproxy-conf
 HAPROXY_FILE=/tmp/themguts.$$
 PORT_NUMBER=8080
-
+DOCKER_IMAGE=adamoss/oss-webs:1.0
 ##################################
 # ASK ABOUT HTTP SERVER COUNTS
 echo -n "HOW MANY ON EACH NODE MASTER?: "
@@ -24,8 +24,8 @@ echo "SPINNING UP $COUNT SERVERS"
 for i in $(seq 1 $COUNT)
 do
  # DO ONE FOR EACH NODE PI
- docker -H tcp://127.0.0.1:3456 run -d -p ${PORT_NUMBER}:80 hypriot/rpi-busybox-httpd
- docker -H tcp://127.0.0.1:3456 run -d -p ${PORT_NUMBER}:80 hypriot/rpi-busybox-httpd
+ docker -H tcp://127.0.0.1:3456 run -d -p ${PORT_NUMBER}:80 $DOCKER_IMAGE
+ docker -H tcp://127.0.0.1:3456 run -d -p ${PORT_NUMBER}:80 $DOCKER_IMAGE
  # EXAMPLE HAX
  echo "server pi1-port${PORT_NUMBER} ${PI1}:${PORT_NUMBER} check" >> $HAPROXY_FILE
  echo "server pi2-port${PORT_NUMBER} ${PI2}:${PORT_NUMBER} check" >> $HAPROXY_FILE

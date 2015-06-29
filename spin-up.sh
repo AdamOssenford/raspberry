@@ -1,7 +1,17 @@
+#!/bin/bash
+##########################################################
+# RASPBERRY PI HTTP SPINNER AND HAPROXY LAUNCHER
+##########################################################
+# VARIABLES #
+#############
 PI1=192.168.7.28
 PI2=192.168.7.179
-HAPROXY_FILE=/root/haproxy-conf/haproxy-guts
+HAPROXY_DIR=/root/haproxy-conf
+HAPROXY_FILE=/tmp/themguts.$$
 PORT_NUMBER=8080
+
+##################################
+# ASK ABOUT HTTP SERVER COUNTS
 echo -n "HOW MANY ON EACH NODE MASTER?: "
 read ANSWER
 if [ "$ANSWER" -gt 1 ]
@@ -22,9 +32,10 @@ do
  let "PORT_NUMBER+=1"
 done
 # BUILD THE HAPROXY
-cat /root/haproxy-conf/haproxy-head > /root/haproxy-conf/haproxy.cfg
-cat $HAPROXY_FILE >> /root/haproxy-conf/haproxy.cfg
-cat /root/haproxy-conf/haproxy-tail >> /root/haproxy-conf/haproxy.cfg
+cat $HAPROXY_DIR/haproxy-head > $HAPROXY_DIR/haproxy.cfg
+cat $HAPROXY_FILE >> $HAPROXY_DIR/haproxy.cfg
+cat $HAPROXY_DIR/haproxy-tail >> $HAPROXY_DIR/haproxy.cfg
+rm $HAPROXY_FILE
 # LAUNCH HAPROXY
 echo "MASTER I SHALL NOW LAUNCH HAPROXY AS REQUESTED"
 # this exposes port 80 and 70 also mounts /root/haproxy-conf as /haproxy-override inside the container
